@@ -4,7 +4,7 @@
   "description": "difference file generator",
   "main": "dist/index.js",
   "bin": {
-    "hexlet": "dist/bin/gendiff.js"
+    "gendiff": "dist/bin/interface.js"
   },
   "engines": {
     "node": ">=13"
@@ -32,7 +32,8 @@
   "homepage": "https://github.com/butkovv/frontend-project-lvl2#readme",
   "dependencies": {
     "babel-cli": "^6.26.0",
-    "commander": "^4.1.1"
+    "commander": "^4.1.1",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
