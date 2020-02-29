@@ -2,8 +2,12 @@ const _ = require('lodash');
 
 const stringify = (diffValue, level) => {
   if (diffValue instanceof Object) {
-    const valArray = Object.entries(diffValue).map(([key, value]) => `${key}: ${value}`);
-    return `{\n${' '.repeat((level + 1) * 4)}${valArray.join('\n')}\n${' '.repeat((level) * 4)}}`;
+    const valArray = Object.entries(diffValue)
+      .map(([key, value]) => {
+        if (value instanceof Object) return `${key}: ${stringify(value, level + 1)}`;
+        return `${key}: ${value}`;
+      });
+    return `{\n${' '.repeat((level + 1) * 4)}${valArray.join(`\n${' '.repeat((level + 1) * 4)}`)}\n${' '.repeat((level) * 4)}}`;
   }
   return diffValue;
 };
