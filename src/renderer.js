@@ -1,13 +1,14 @@
 const _ = require('lodash');
 
+const stringify = (diffValue, level) => {
+  if (diffValue instanceof Object) {
+    const valArray = Object.entries(diffValue).map(([key, value]) => `${key}: ${value}`);
+    return `{\n${' '.repeat((level + 1) * 4)}${valArray.join('\n')}\n${' '.repeat((level) * 4)}}`;
+  }
+  return diffValue;
+};
+
 const render = (diffArray) => {
-  const stringify = (diffValue, level) => {
-    if (diffValue instanceof Object) {
-      const valArray = Object.entries(diffValue).map(([key, value]) => `${key}: ${value}`);
-      return `{\n${' '.repeat((level + 1) * 4)}${valArray.join('\n')}\n${' '.repeat((level) * 4)}}`;
-    }
-    return diffValue;
-  };
   const iter = (node, level = 0) => {
     const openingOffset = ' '.repeat(level * 4);
     const closingOffset = ' '.repeat((level + 1) * 4);
