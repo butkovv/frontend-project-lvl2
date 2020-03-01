@@ -1,7 +1,7 @@
 install: install-deps
 
 run:
-	npx babel-node 'src/bin/interface.js' __fixtures__/before.json __fixtures__/empty.json
+	npx babel-node 'src/bin/interface.js' __fixtures__/after.json __fixtures__/before.json
 
 install-deps:
 	npm ci
