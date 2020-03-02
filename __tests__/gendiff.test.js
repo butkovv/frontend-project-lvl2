@@ -11,5 +11,5 @@ test.each([
   const path1 = getFixturePath(string1);
   const path2 = getFixturePath(string2);
   const result = getFixturePath(expected);
-  expect(genDiff(path1, path2)).toEqual(fs.readFileSync(result, 'utf-8').trim());
+  expect(genDiff(path1, path2, 'tree')).toEqual(fs.readFileSync(result, 'utf-8').trim());
 });
