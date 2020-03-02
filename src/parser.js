@@ -6,15 +6,16 @@ const path = require('path');
 
 const parse = (configPath) => {
   const format = path.extname(configPath);
-  if (format === '.json') {
-    return JSON.parse(fs.readFileSync(path.resolve(process.cwd(), configPath)));
-  }
-  if (format === '.yml') {
-    return yaml.safeLoad(fs
-      .readFileSync(path.resolve(process.cwd(), configPath)), { schema: FAILSAFE_SCHEMA });
-  }
-  if (format === '.ini') {
-    return ini.decode(fs.readFileSync(path.resolve(process.cwd(), configPath), 'utf-8'));
+  const file = fs.readFileSync(path.resolve(process.cwd(), configPath), 'utf-8');
+  switch (format) {
+    case '.json':
+      return JSON.parse(file);
+    case '.yml':
+      return yaml.safeLoad(file, { schema: FAILSAFE_SCHEMA });
+    case '.ini':
+      return ini.decode(file);
+    default:
+      break;
   }
   return null;
 };

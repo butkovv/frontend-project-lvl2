@@ -1,5 +1,6 @@
 import parse from './parser';
-import render from './renderer';
+import render from './formatters/renderer-tree';
+import renderPlain from './formatters/renderer-plain';
 
 const _ = require('lodash');
 
