@@ -2,49 +2,21 @@ import path from 'path';
 import fs from 'fs';
 import genDiff from '../src';
 
-test.each([
-  ['before.json', 'after.json', 'tree.diff'],
-  ['before.yml', 'after.yml', 'tree.diff'],
-  ['before.ini', 'after.ini', 'tree.diff'],
-])('main flow tree', (string1, string2, expected) => {
-  const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
-  const path1 = getFixturePath(string1);
-  const path2 = getFixturePath(string2);
-  const result = getFixturePath(expected);
-  expect(genDiff(path1, path2, 'tree')).toEqual(fs.readFileSync(result, 'utf-8').trim());
-});
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const json1 = getFixturePath('before.json');
+const json2 = getFixturePath('after.json');
+const yml1 = getFixturePath('before.yml');
+const yml2 = getFixturePath('after.yml');
+const ini1 = getFixturePath('before.ini');
+const ini2 = getFixturePath('after.ini');
 
 test.each([
-  ['before.json', 'after.json', 'plain.diff'],
-  ['before.yml', 'after.yml', 'plain.diff'],
-  ['before.ini', 'after.ini', 'plain.diff'],
-])('main flow plain', (string1, string2, expected) => {
-  const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
-  const path1 = getFixturePath(string1);
-  const path2 = getFixturePath(string2);
+  ['tree', 'tree.diff'],
+  ['plain', 'plain.diff'],
+  ['json', 'json.diff'],
+])('main flow', (format, expected) => {
   const result = getFixturePath(expected);
-  expect(genDiff(path1, path2, 'plain')).toEqual(fs.readFileSync(result, 'utf-8').trim());
-});
-
-test.each([
-  ['before.json', 'after.json', 'json.diff'],
-  ['before.yml', 'after.yml', 'json.diff'],
-  ['before.ini', 'after.ini', 'json-ini.diff'],
-])('main flow json', (string1, string2, expected) => {
-  const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
-  const path1 = getFixturePath(string1);
-  const path2 = getFixturePath(string2);
-  const result = getFixturePath(expected);
-  expect(genDiff(path1, path2, 'json')).toEqual(fs.readFileSync(result, 'utf-8').trim());
-});
-
-test.each([
-  ['before.json', 'empty.json', 'empty.diff'],
-  ['empty.yml', 'after.yml', 'empty-2.diff'],
-])('borderline cases', (string1, string2, expected) => {
-  const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
-  const path1 = getFixturePath(string1);
-  const path2 = getFixturePath(string2);
-  const result = getFixturePath(expected);
-  expect(genDiff(path1, path2, 'tree')).toEqual(fs.readFileSync(result, 'utf-8').trim());
+  expect(genDiff(json1, json2, format)).toEqual(fs.readFileSync(result, 'utf-8').trim());
+  expect(genDiff(yml1, yml2, format)).toEqual(fs.readFileSync(result, 'utf-8').trim());
+  expect(genDiff(ini1, ini2, format)).toEqual(fs.readFileSync(result, 'utf-8').trim());
 });

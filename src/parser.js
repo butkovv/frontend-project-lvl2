@@ -12,8 +12,9 @@ const parse = (configPath) => {
       return JSON.parse(fileContents);
     case '.yml':
       return yaml.safeLoad(fileContents);
-    case '.ini':
+    case '.ini': {
       return ini.decode(fileContents);
+    }
     default:
       throw new Error(`File type is not supported: ${fileExtension}`);
   }
