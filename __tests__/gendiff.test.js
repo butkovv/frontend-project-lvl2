@@ -38,11 +38,9 @@ test.each([
   expect(genDiff(path1, path2, 'json')).toEqual(fs.readFileSync(result, 'utf-8').trim());
 });
 
-/*
 test.each([
-  ['before.json', 'after.json', 'result.diff'],
-  ['before.yml', 'after.yml', 'result.diff'],
-  ['before.ini', 'after.ini', 'result.diff'],
+  ['before.json', 'empty.json', 'empty.diff'],
+  ['empty.yml', 'after.yml', 'empty-2.diff'],
 ])('borderline cases', (string1, string2, expected) => {
   const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
   const path1 = getFixturePath(string1);
@@ -50,4 +48,3 @@ test.each([
   const result = getFixturePath(expected);
   expect(genDiff(path1, path2, 'tree')).toEqual(fs.readFileSync(result, 'utf-8').trim());
 });
-*/
