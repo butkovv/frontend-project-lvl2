@@ -1,9 +1,17 @@
 import renderPlain from './renderer-plain';
 import renderTree from './renderer-tree';
+import renderJSON from './renderer-json';
 
-const getRenderer = (format, diffArray) => {
-  if (format === 'tree') return renderTree(diffArray);
-  if (format === 'plain') return renderPlain(diffArray);
-  return null;
+const getRenderer = (format) => {
+  switch (format) {
+    case 'tree':
+      return renderTree;
+    case 'plain':
+      return renderPlain;
+    case 'json':
+      return renderJSON;
+    default:
+      throw new Error(`Unknown format: ${format}`);
+  }
 };
 export default getRenderer;

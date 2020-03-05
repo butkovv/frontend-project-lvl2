@@ -1,12 +1,11 @@
 import parse from './parser';
 import getRenderer from './formatters';
-// import renderPlain from './formatters/renderer-plain';
 
 const _ = require('lodash');
 
 const genDiff = (firstPath, secondPath, format) => {
-  const firstObject = parse(firstPath);
-  const secondObject = parse(secondPath);
+  const firstConfig = parse(firstPath);
+  const secondConfig = parse(secondPath);
   const compare = (o1, o2) => {
     const properties = _.uniq([...Object.keys(o1), ...Object.keys(o2)]).sort();
     const iter = (property) => {
@@ -28,7 +27,7 @@ const genDiff = (firstPath, secondPath, format) => {
     };
     return properties.map(iter);
   };
-  const diffArray = compare(firstObject, secondObject);
-  return getRenderer(format, diffArray);
+  const diffArray = compare(firstConfig, secondConfig);
+  return getRenderer(format)(diffArray);
 };
 export default genDiff;

@@ -14,8 +14,9 @@ const stringify = (diffValue, level) => {
 
 const render = (diffArray) => {
   const iter = (node, level = 0) => {
-    const openingOffset = ' '.repeat(level * 4);
-    const closingOffset = ' '.repeat((level + 1) * 4);
+    const offsetLength = 4;
+    const openingOffset = ' '.repeat(level * offsetLength);
+    const closingOffset = ' '.repeat((level + 1) * offsetLength);
     if (node.children) {
       return `${openingOffset}${' '.repeat(4)}${node.name}: {\n${node.children.map((child) => iter(child, level + 1)).join('\n')}\n${closingOffset}}`;
     }
