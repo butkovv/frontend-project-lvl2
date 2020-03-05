@@ -4,6 +4,7 @@
 # frontend-project-lvl2
 gendiff is a cli-application and a library for comparing configuration files.<br>
 Supported formats are JSON, YML and INI. Result can be output in three ways, see ascii casts below for examples.<br>
+<br>
 'tree' format (default):<br>
 [![asciicast](https://asciinema.org/a/307710.svg)](https://asciinema.org/a/307710)<br>
 <br>
