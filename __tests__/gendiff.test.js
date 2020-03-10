@@ -15,8 +15,11 @@ test.each([
   ['plain', 'plain.diff'],
   ['json', 'json.diff'],
 ])('main flow', (format, expected) => {
-  const result = getFixturePath(expected);
-  expect(genDiff(json1, json2, format)).toEqual(fs.readFileSync(result, 'utf-8').trim());
-  expect(genDiff(yml1, yml2, format)).toEqual(fs.readFileSync(result, 'utf-8').trim());
-  expect(genDiff(ini1, ini2, format)).toEqual(fs.readFileSync(result, 'utf-8').trim());
+  const expectedResult = fs.readFileSync(getFixturePath(expected), 'utf-8').trim();
+  const actualResult1 = genDiff(json1, json2, format);
+  const actualResult2 = genDiff(yml1, yml2, format);
+  const actualResult3 = genDiff(ini1, ini2, format);
+  expect(actualResult1).toEqual(expectedResult);
+  expect(actualResult2).toEqual(expectedResult);
+  expect(actualResult3).toEqual(expectedResult);
 });
