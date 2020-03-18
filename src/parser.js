@@ -1,22 +1,17 @@
-import fs from 'fs';
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const path = require('path');
-
-const parse = (configPath) => {
-  const fileExtension = path.extname(configPath);
-  const fileContents = fs.readFileSync(path.resolve(process.cwd(), configPath), 'utf-8');
+const getParser = (fileExtension) => {
   switch (fileExtension) {
     case '.json':
-      return JSON.parse(fileContents);
+      return JSON.parse;
     case '.yml':
-      return yaml.safeLoad(fileContents);
+      return yaml.safeLoad;
     case '.ini': {
-      return ini.decode(fileContents);
+      return ini.decode;
     }
     default:
       throw new Error(`File type is not supported: ${fileExtension}`);
   }
 };
-export default parse;
+export default getParser;

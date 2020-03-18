@@ -1,9 +1,17 @@
-import parse from './parser';
+import fs from 'fs';
+import getParser from './parser';
 import getRenderer from './formatters';
 
+const path = require('path');
 const _ = require('lodash');
 
 const genDiff = (firstPath, secondPath, format) => {
+  const parse = (pathToFile) => {
+    const fileExtension = path.extname(pathToFile);
+    const fileContents = fs.readFileSync(path.resolve(process.cwd(), pathToFile), 'utf-8');
+    const parsedFile = getParser(fileExtension)(fileContents);
+    return parsedFile;
+  };
   const firstConfig = parse(firstPath);
   const secondConfig = parse(secondPath);
   const compare = (o1, o2) => {
