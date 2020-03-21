@@ -7,7 +7,8 @@ import getRenderer from './formatters';
 const genDiff = (firstPath, secondPath, format) => {
   const parse = (pathToFile) => {
     const fileExtension = path.extname(pathToFile);
-    const fileContents = fs.readFileSync(path.resolve(process.cwd(), pathToFile), 'utf-8');
+    const absolutePath = path.resolve(process.cwd(), pathToFile);
+    const fileContents = fs.readFileSync(absolutePath, 'utf-8');
     const parsedFile = getParser(fileExtension)(fileContents);
     return parsedFile;
   };
