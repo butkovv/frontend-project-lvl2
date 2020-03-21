@@ -14,7 +14,7 @@ const genDiff = (firstPath, secondPath, format) => {
   const firstConfig = parse(firstPath);
   const secondConfig = parse(secondPath);
   const compareObjects = (o1, o2) => {
-    const properties = _.uniq([...Object.keys(o1), ...Object.keys(o2)]).sort();
+    const properties = _.union(_.keys(o1), _.keys(o2)).sort();
     const compareProperties = (property) => {
       if (o1[property] instanceof Object && o2[property] instanceof Object) {
         return { type: 'branch', name: property, children: compareObjects(o1[property], o2[property]) };
