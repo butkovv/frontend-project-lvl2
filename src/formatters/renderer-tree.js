@@ -13,12 +13,12 @@ const stringify = (diffValue, level) => {
 };
 
 const render = (diffArray) => {
-  const iter = (node, level = 0) => {
+  const processNode = (node, level = 0) => {
     const offsetLength = 4;
     const openingOffset = ' '.repeat(level * offsetLength);
     const closingOffset = ' '.repeat((level + 1) * offsetLength);
     if (node.children) {
-      return `${openingOffset}${' '.repeat(4)}${node.name}: {\n${node.children.map((child) => iter(child, level + 1)).join('\n')}\n${closingOffset}}`;
+      return `${openingOffset}${' '.repeat(4)}${node.name}: {\n${node.children.map((child) => processNode(child, level + 1)).join('\n')}\n${closingOffset}}`;
     }
     if (node.type === 'added') {
       return `${openingOffset}  + ${node.name}: ${stringify(node.value, level + 1)}`;
@@ -31,7 +31,7 @@ const render = (diffArray) => {
     }
     return `${openingOffset}${' '.repeat(4)}${node.name}: ${stringify(node.value, level + 1)}`;
   };
-  const diffString = `{\n${_.flatten(diffArray.map((element) => iter(element, 0))).join('\n')}\n}`;
+  const diffString = `{\n${_.flatten(diffArray.map((element) => processNode(element, 0))).join('\n')}\n}`;
   return diffString;
 };
 export default render;

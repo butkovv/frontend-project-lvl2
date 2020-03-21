@@ -13,11 +13,11 @@ const genDiff = (firstPath, secondPath, format) => {
   };
   const firstConfig = parse(firstPath);
   const secondConfig = parse(secondPath);
-  const compare = (o1, o2) => {
+  const compareObjects = (o1, o2) => {
     const properties = _.uniq([...Object.keys(o1), ...Object.keys(o2)]).sort();
-    const iter = (property) => {
+    const compareProperties = (property) => {
       if (o1[property] instanceof Object && o2[property] instanceof Object) {
-        return { type: 'branch', name: property, children: compare(o1[property], o2[property]) };
+        return { type: 'branch', name: property, children: compareObjects(o1[property], o2[property]) };
       }
       if (!_.has(o1, property)) {
         return { type: 'added', name: property, value: o2[property] };
@@ -32,9 +32,9 @@ const genDiff = (firstPath, secondPath, format) => {
       }
       return { type: 'unchanged', name: property, value: o1[property] };
     };
-    return properties.map(iter);
+    return properties.map(compareProperties);
   };
-  const diffArray = compare(firstConfig, secondConfig);
+  const diffArray = compareObjects(firstConfig, secondConfig);
   return getRenderer(format)(diffArray);
 };
 export default genDiff;
