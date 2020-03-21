@@ -1,17 +1,17 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const getParser = (fileExtension) => {
-  switch (fileExtension) {
-    case '.json':
+const getParser = (dataType) => {
+  switch (dataType) {
+    case 'json':
       return JSON.parse;
-    case '.yml':
+    case 'yml':
       return yaml.safeLoad;
-    case '.ini': {
+    case 'ini': {
       return ini.decode;
     }
     default:
-      throw new Error(`File type is not supported: ${fileExtension}`);
+      throw new Error(`Data type is not supported: ${dataType}`);
   }
 };
 export default getParser;
