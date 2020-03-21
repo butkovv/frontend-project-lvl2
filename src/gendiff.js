@@ -1,9 +1,8 @@
 import fs from 'fs';
+import path from 'path';
+import _ from 'lodash';
 import getParser from './parser';
 import getRenderer from './formatters';
-
-const path = require('path');
-const _ = require('lodash');
 
 const genDiff = (firstPath, secondPath, format) => {
   const parse = (pathToFile) => {
