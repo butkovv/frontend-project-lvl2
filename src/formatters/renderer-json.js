@@ -1,6 +1,2 @@
-const render = (diffTree) => {
-  const mappedDiff = diffTree
-    .map((node) => JSON.stringify(node)).join();
-  return `{"diff":[${mappedDiff}]}`;
-};
+const render = (diffTree) => JSON.stringify(diffTree);
 export default render;

@@ -1,25 +1,20 @@
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
-import getParser from './parser';
+import parse from './parser';
 import getRenderer from './formatters';
 
 const genDiff = (firstPath, secondPath, format) => {
-  const convertStringsToNums = (value) => {
-    if (_.isPlainObject(value)) return undefined;
-    if (!(typeof value === 'string')) return value;
-    return Number.isNaN(Number(value)) ? value : Number(value);
-  };
-  const parse = (pathToFile) => {
+  const readData = (pathToFile) => {
     const dataType = path.extname(pathToFile).slice(1);
     const absolutePath = path.resolve(process.cwd(), pathToFile);
-    const fileContents = fs.readFileSync(absolutePath, 'utf-8');
-    const parsedData = getParser(dataType)(fileContents);
-    const result = _.cloneDeepWith(parsedData, convertStringsToNums);
-    return result;
+    const data = fs.readFileSync(absolutePath, 'utf-8');
+    return { dataType, data };
   };
-  const firstConfig = parse(firstPath);
-  const secondConfig = parse(secondPath);
+  const firstConfig = readData(firstPath);
+  const secondConfig = readData(secondPath);
+  const firstObject = parse(firstConfig.data, firstConfig.dataType);
+  const secondObject = parse(secondConfig.data, secondConfig.dataType);
   const compareObjects = (o1, o2) => {
     const properties = _.union(_.keys(o1), _.keys(o2)).sort();
     const processProperty = (property) => {
@@ -27,21 +22,21 @@ const genDiff = (firstPath, secondPath, format) => {
         return { type: 'branch', name: property, children: compareObjects(o1[property], o2[property]) };
       }
       if (!_.has(o1, property)) {
-        return { type: 'added', name: property, value: o2[property] };
+        return { type: 'added', name: property, currentValue: o2[property] };
       }
       if (!_.has(o2, property)) {
-        return { type: 'removed', name: property, value: o1[property] };
+        return { type: 'removed', name: property, currentValue: o1[property] };
       }
       if (o1[property] !== o2[property]) {
         return {
-          type: 'changed', name: property, value: o2[property], previousValue: o1[property],
+          type: 'changed', name: property, currentValue: o2[property], previousValue: o1[property],
         };
       }
-      return { type: 'unchanged', name: property, value: o1[property] };
+      return { type: 'unchanged', name: property, currentValue: o1[property] };
     };
     return properties.map(processProperty);
   };
-  const diffTree = compareObjects(firstConfig, secondConfig);
+  const diffTree = compareObjects(firstObject, secondObject);
   return getRenderer(format)(diffTree);
 };
 export default genDiff;

@@ -1,5 +1,6 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
+import _ from 'lodash';
 
 const getParser = (dataType) => {
   switch (dataType) {
@@ -14,4 +15,16 @@ const getParser = (dataType) => {
       throw new Error(`Data type is not supported: ${dataType}`);
   }
 };
-export default getParser;
+
+const convertStringsToNums = (value) => {
+  if (_.isPlainObject(value)) return undefined;
+  if (!(typeof value === 'string')) return value;
+  return Number.isNaN(Number(value)) ? value : Number(value);
+};
+
+const parse = (data, dataType) => {
+  const parsedData = getParser(dataType)(data);
+  const result = _.cloneDeepWith(parsedData, convertStringsToNums);
+  return result;
+};
+export default parse;
