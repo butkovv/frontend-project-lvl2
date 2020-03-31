@@ -1,6 +1,5 @@
 import renderPlain from './renderer-plain';
 import renderTree from './renderer-tree';
-import renderJSON from './renderer-json';
 
 const getRenderer = (format) => {
   switch (format) {
@@ -9,7 +8,7 @@ const getRenderer = (format) => {
     case 'plain':
       return renderPlain;
     case 'json':
-      return renderJSON;
+      return JSON.stringify;
     default:
       throw new Error(`Unknown format: ${format}`);
   }

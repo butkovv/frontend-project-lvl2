@@ -1,21 +1,36 @@
+import _ from 'lodash';
+
+const processValue = (value) => {
+  if (_.isObject(value)) {
+    return '[complex value]';
+  }
+  return `'${value}'`;
+};
+
 const render = (diffTree) => {
-  const processNode = (node, path = []) => {
-    switch (node.type) {
+  const processNode = (node) => {
+    const {
+      name,
+      type,
+      children,
+      ancestors,
+      currentValue,
+      previousValue,
+    } = node;
+
+    switch (type) {
       case 'branch':
-        return node.children
-          .flatMap((child) => processNode(child, [...path, node.name]))
-          .filter((child) => (child !== null))
-          .join('\n');
+        return render(children);
       case 'added':
-        return `Property '${[...path, node.name].join('.')}' was added with value: ${node.currentValue instanceof Object ? '[complex value]' : `'${node.currentValue}'`}`;
+        return `Property '${[...ancestors, name].join('.')}' was added with value: ${processValue(currentValue)}`;
       case 'removed':
-        return `Property '${[...path, node.name].join('.')}' was removed`;
+        return `Property '${[...ancestors, name].join('.')}' was removed`;
       case 'changed':
-        return `Property '${[...path, node.name].join('.')}' was changed from ${node.previousValue instanceof Object ? '[complex value]' : `'${node.previousValue}'`} to ${node.currentValue instanceof Object ? '[complex value]' : `'${node.currentValue}'`}`;
+        return `Property '${[...ancestors, name].join('.')}' was changed from ${processValue(previousValue)} to ${processValue(currentValue)}`;
       case 'unchanged':
         return null;
       default:
-        throw new Error(`Unknown node type: ${node.type}`);
+        throw new Error(`Unknown node type: ${type}`);
     }
   };
   return diffTree
