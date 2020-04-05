@@ -7,26 +7,26 @@ const processValue = (value) => {
   return `'${value}'`;
 };
 
-const render = (diffTree) => {
+const render = (diffTree, ancestors = []) => {
   const processNode = (node) => {
     const {
       name,
       type,
       children,
-      ancestors,
       currentValue,
       previousValue,
     } = node;
+    const fullPropertyName = [...ancestors, name].join('.');
 
     switch (type) {
       case 'branch':
-        return render(children);
+        return render(children, [...ancestors, name]);
       case 'added':
-        return `Property '${[...ancestors, name].join('.')}' was added with value: ${processValue(currentValue)}`;
+        return `Property '${fullPropertyName}' was added with value: ${processValue(currentValue)}`;
       case 'removed':
-        return `Property '${[...ancestors, name].join('.')}' was removed`;
+        return `Property '${fullPropertyName}' was removed`;
       case 'changed':
-        return `Property '${[...ancestors, name].join('.')}' was changed from ${processValue(previousValue)} to ${processValue(currentValue)}`;
+        return `Property '${fullPropertyName}' was changed from ${processValue(previousValue)} to ${processValue(currentValue)}`;
       case 'unchanged':
         return null;
       default:
@@ -34,7 +34,7 @@ const render = (diffTree) => {
     }
   };
   return diffTree
-    .flatMap((node) => processNode(node, []))
+    .flatMap((node) => processNode(node))
     .filter((node) => (node !== null))
     .join('\n');
 };
